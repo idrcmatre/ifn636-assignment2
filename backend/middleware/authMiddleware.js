@@ -109,6 +109,31 @@ class AuthMiddleware {
         };
     };
 
+    requireAnyPermission = (...permissions) => {
+        return (req, res, next) => {
+            try {
+                if (!req.user) {
+                    return res.status(403).json({ message: 'User not authenticated' });
+                }
+
+                // Check if user has ANY of the required permissions
+                const hasPermission = permissions.some(permission =>
+                    req.user.canPerformAction(permission)
+                );
+
+                if (!hasPermission) {
+                    return res.status(403).json({
+                        message: `One of these permissions required: ${permissions.join(', ')}`
+                    });
+                }
+
+                next();
+            } catch (error) {
+                return res.status(403).json({ message: 'Permission check failed' });
+            }
+        };
+    };
+
     /**
      * Rate Limiting Middleware - Using Decorator Pattern
      */

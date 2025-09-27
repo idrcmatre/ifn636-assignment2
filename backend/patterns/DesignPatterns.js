@@ -1053,7 +1053,8 @@ class EChallanFacade {
 
                 dashboardData = {
                     role: 'officer',
-                    issuedChallans: challans.length,           // ← Changed from totalIssued
+
+                    issuedChallans: challans.length,
                     todayChallans: challans.filter(c =>
                         new Date(c.dateTime).toDateString() === today
                     ).length,
@@ -1062,7 +1063,9 @@ class EChallanFacade {
                         const currentMonth = new Date().getMonth();
                         return challanMonth === currentMonth;
                     }).length,
-                    collectionAmount: payments.reduce((sum, p) => sum + p.amount, 0), // ← Added this
+                  
+                    collectionAmount: payments.reduce((sum, p) => sum + p.amount, 0), // ← This is missing
+
                     recentChallans: challans.slice(-5).map(c => c.toJSON())
                 };
             }
